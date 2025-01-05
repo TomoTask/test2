@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        #content {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My App</h1>
+        <div id="content">Loading...</div>
+    </div>
+
+    <script>
+        // Google Apps ScriptのデプロイされたURLを設定
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrzf1gaI3GmsMjAbYzuQS6kueCGMWgCI6kSVk_A1VERMrQQLQnBAtrROkuPPJavP7d0w/exec';
+
+        async function fetchData() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.text();
+                document.getElementById('content').textContent = data;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">エラーが発生しました。しばらくしてから再度お試しください。</div>
+                `;
+            }
+        }
+
+        // ページ読み込み時にデータを取得
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
